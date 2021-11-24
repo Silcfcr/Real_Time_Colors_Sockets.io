@@ -1,37 +1,21 @@
+console.log("connected!")
+let socket = io( 'http://localhost:7777' );
 
-let socket = io( 'http://localhost:8888' );
-
-$( '.messageForm' ).on( 'submit', function(event){
+socket.emit( 'greeting');
+// $("body").css("background-color", "black");
+$( '.btn' ).on( 'click', function(event){
     event.preventDefault();
+    console.log(`${event.target.id} has been clicked`);
 
-    let userName = $( '#userName' ).val();
-    let userMessage = $( '#userMessage' ).val();
-
-    let send = {
-        name: userName,
-        message: userMessage
+    let color = {
+        color: event.target.id,
+        
     };
 
-    socket.emit( 'sendMessage', send );
+    socket.emit( 'button_clicked', color );
 });
 
-socket.on( 'sendAll', function( data ){
-    let newMessage = `<p> ${data.name}: ${data.message} </p>`;
-    $( '.messageBox' ).append( newMessage );
+socket.on( 'changeColor', function( data ){
+    console.log(data.color + " changing color!!!");
+    $(".body").css("background-color", data.color);
 });
-
-/*
-socket.emit( 'greeting', {name : firstName} );
-
-socket.on( 'information', function(data){
-    console.log( data.message );
-});
-
-$( '.broadCast' ).on( 'click', function(event){
-    socket.emit( 'general', {});
-});
-
-socket.on( 'listenAll', function( data ){
-    console.log( data.message );
-});
-*/
